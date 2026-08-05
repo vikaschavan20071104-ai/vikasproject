@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FRUIT@NUT</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Rozha+One&family=Noto+Sans+Devanagari:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cover-deep:#3E1114;
+    --cover:#631C1F;
+    --cover-light:#8A2A2D;
+    --gold:#C9962C;
+    --gold-light:#EAD08A;
+    --page:#FBF3DE;
+    --page-alt:#F3E7C6;
+    --line:#E1CD9A;
+    --ink:#2A1E12;
+    --ink-soft:#6B5940;
+    --ok:#4C6B2E;
+    --ok-bg:#E7EDD3;
+    --low:#A6362A;
+    --low-bg:#F5DCCF;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    min-height:100vh;
+    background:
+      radial-gradient(circle at 20% 15%, rgba(255,255,255,0.04), transparent 30%),
+      linear-gradient(160deg, var(--cover), var(--cover-deep));
+    font-family:'Noto Sans Devanagari', sans-serif;
+    color:var(--ink);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:24px 12px;
+  }
+  .scene{ width:100%; max-width:760px; perspective:2000px; }
+
+  /* ---- Cover / intro ---- */
+  .cover{
+    position:relative;
+    border-radius:14px;
+    padding:70px 30px;
+    text-align:center;
+    background:
+      repeating-linear-gradient(135deg, rgba(255,255,255,0.03) 0 2px, transparent 2px 6px),
+      linear-gradient(160deg, var(--cover-light), var(--cover) 60%, var(--cover-deep));
+    border:2px solid var(--gold);
+    box-shadow: 0 30px 60px rgba(0,0,0,0.45), inset 0 0 0 6px rgba(0,0,0,0.15);
+    cursor:pointer;
+    animation: settle 0.9s ease both;
+  }
+  @keyframes settle{
+    from{ opacity:0; transform: translateY(18px) scale(0.98); }
+    to{ opacity:1; transform: translateY(0) scale(1); }
+  }
+  .seal{
+    width:86px;height:86px;border-radius:50%;
+    background: radial-gradient(circle at 35% 30%, var(--gold-light), var(--gold) 70%);
+    display:flex;align-items:center;justify-content:center;
+    font-size:38px; margin:0 auto 18px;
+    box-shadow: 0 6px 14px rgba(0,0,0,0.35), inset 0 0 0 3px rgba(255,255,255,0.35);
+    border:3px solid rgba(0,0,0,0.2);
+  }
+  .cover h1{
+    font-family:'Rozha One', serif;
+    color:var(--gold-light);
+    font-size:clamp(28px,5vw,40px);
+    margin:0 0 8px;
+    text-shadow: 0 2px 0 rgba(0,0,0,0.4);
+  }
+  .cover p{
+    color:rgba(255,255,255,0.75);
+    font-family:'Space Mono', monospace;
+    font-size:13px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    margin:0;
+  }
+  .corner{
+    position:absolute; width:34px; height:34px; color:var(--gold); opacity:0.75; font-size:22px;
+  }
+  .corner.tl{top:10px;left:14px;} .corner.tr{top:10px;right:14px; transform:scaleX(-1);}
+  .corner.bl{bottom:10px;left:14px; transform:scaleY(-1);} .corner.br{bottom:10px;right:14px; transform:scale(-1,-1);}
+
+  /* ---- Book / pages ---- */
+  .book{
+    display:none;
+    border-radius:14px;
+    overflow:hidden;
+    border:10px solid var(--cover-light);
+    box-shadow: 0 30px 70px rgba(0,0,0,0.5);
+    animation: open 0.6s ease both;
+  }
+  @keyframes open{
+    from{ opacity:0; transform: rotateX(8deg) translateY(20px); }
+    to{ opacity:1; transform: rotateX(0) translateY(0); }
+  }
+  .book.show{ display:block; }
+  .pages{
+    position:relative;
+    background:
+      repeating-linear-gradient(var(--page), var(--page) 37px, var(--line) 38px),
+      var(--page);
+  }
+  .margin-line{
+    position:absolute; top:0; bottom:0; left:46px; width:3px;
+    background:var(--gold); opacity:0.45;
+  }
+  .content{ position:relative; padding:22px 20px 26px 62px; }
+
+  .eyebrow{
+    font-family:'Space Mono', monospace; font-size:11px; letter-spacing:0.14em;
+    text-transform:uppercase; color:var(--gold); margin-bottom:4px;
+  }
+  .shopname{
+    font-family:'Rozha One', serif; font-size:26px; color:var(--cover-deep);
+    background:transparent; border:none; outline:none; width:100%; padding:0;
+  }
+  .datestamp{ font-size:12px; color:var(--ink-soft); margin-top:2px; }
+
+  .stamps{ display:flex; flex-wrap:wrap; gap:8px; margin:16px 0; }
+  .stamp{
+    font-family:'Space Mono', monospace; font-weight:700; font-size:12px;
+    padding:5px 10px; border-radius:4px; border:2px solid; background:#fff;
+    box-shadow: 1px 2px 0 rgba(0,0,0,0.05);
+  }
+  .stamp.dark{ color:var(--cover-deep); border-color:var(--cover-deep); }
+  .stamp.gold{ color:var(--gold); border-color:var(--gold); }
+  .stamp.ok{ color:var(--ok); border-color:var(--ok); }
+  .stamp.low{ color:var(--low); border-color:var(--low); background:var(--low-bg); }
+
+  .toolbar{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px; }
+  input, select{
+    font-family:'Noto Sans Devanagari', sans-serif; font-size:14px;
+    border:1.5px solid var(--line); border-radius:8px; padding:9px 12px;
+    background:#fffdf7; color:var(--ink);
+  }
+  input:focus, select:focus{ outline:2px solid var(--gold); outline-offset:1px; }
+  #search{ flex:1; min-width:140px; }
+  button{
+    font-family:'Noto Sans Devanagari', sans-serif; font-weight:700; font-size:13px;
+    border:none; border-radius:8px; padding:9px 14px; cursor:pointer;
+    transition: transform 0.12s ease, filter 0.12s ease;
+  }
+  button:active{ transform: scale(0.96); }
+  .btn-primary{ background:var(--cover); color:#fff; }
+  .btn-outline{ background:#fffdf7; color:var(--gold); border:1.5px solid var(--gold); }
+  .btn-ok{ background:var(--ok); color:#fff; }
+  .btn-low{ background:var(--low); color:#fff; }
+  .btn-ghost{ background:transparent; color:var(--low); }
+
+  .panel{
+    background:var(--page-alt); border:1.5px dashed var(--gold); border-radius:10px;
+    padding:14px; margin-bottom:16px; animation: fadein 0.25s ease both;
+  }
+  @keyframes fadein{ from{opacity:0; transform:translateY(-4px);} to{opacity:1; transform:translateY(0);} }
+  .panel h3{ font-family:'Rozha One', serif; color:var(--cover-deep); margin:0 0 10px; font-size:17px; }
+  .grid2{ display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+  .grid2 .full{ grid-column:1 / -1; }
+
+  /* calculator */
+  .calc-display{
+    background:#fff; border:1.5px solid var(--line); border-radius:8px;
+    text-align:right; font-family:'Space Mono', monospace; font-size:26px; font-weight:700;
+    padding:12px 14px; margin-bottom:8px; overflow-x:auto;
+  }
+  .calc-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:6px; }
+  .calc-grid button{
+    background:#fff; border:1.5px solid var(--line); font-family:'Space Mono', monospace;
+    font-size:16px; padding:12px 0; color:var(--ink);
+  }
+  .calc-grid button.op{ color:var(--gold); }
+  .calc-grid button.eq{ background:var(--cover); color:#fff; grid-row: span 2; }
+  .calc-grid button.clr{ color:var(--low); }
+  .calc-grid button.zero{ grid-column: span 2; }
+  .calc-grid button.plus{ grid-row: span 2; }
+
+  /* ledger list */
+  .ledger{ background:#fffdf7; border:1.5px solid var(--line); border-radius:10px; overflow:hidden; }
+  .item{ padding:14px 14px; border-bottom:1px solid var(--line); }
+  .item:last-child{ border-bottom:none; }
+  .item-top{ display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap; }
+  .item-name{ font-weight:700; font-size:15px; display:flex; align-items:center; gap:6px; }
+  .item-qty{ font-family:'Space Mono', monospace; font-weight:700; font-size:17px; text-align:right; }
+  .item-price{ font-size:12px; color:var(--ink-soft); text-align:right; }
+  .item-total{ font-family:'Space Mono', monospace; font-weight:700; color:var(--gold); text-align:right; font-size:14px; }
+  .item-actions{ display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; align-items:center; }
+  .item-actions input{ width:72px; padding:6px 8px; font-size:13px; }
+  .item-actions button{ padding:6px 10px; font-size:12px; }
+  .empty{ text-align:center; padding:30px; color:var(--ink-soft); font-size:14px; }
+  .footnote{ text-align:center; font-family:'Space Mono', monospace; font-size:10.5px; color:var(--ink-soft); margin-top:14px; }
+
+  @media(max-width:480px){
+    .content{ padding-left:48px; }
+    .margin-line{ left:34px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="scene">
+  <div class="cover" id="coverEl">
+    <span class="corner tl">❧</span><span class="corner tr">❧</span>
+    <span class="corner bl">❧</span><span class="corner br">❧</span>
+    <div class="seal">🌰</div>
+    <h1>ड्राई फ्रूट्स स्टॉक बही</h1>
+    <p>टैप करके बही खोलें</p>
+  </div>
+
+  <div class="book" id="bookEl">
+    <div class="pages">
+      <div class="margin-line"></div>
+      <div class="content">
+        <div class="eyebrow">स्टॉक रजिस्टर · Stock Ledger</div>
+        <input class="shopname" id="shopName" value="मेरी ड्राई फ्रूट्स शॉप" />
+        <div class="datestamp" id="dateStamp"></div>
+
+        <div class="stamps" id="stampsRow"></div>
+
+        <div class="toolbar">
+          <input id="search" placeholder="🔍 आइटम खोजें..." />
+          <button class="btn-primary" id="toggleAdd">+ नया आइटम</button>
+          <button class="btn-outline" id="toggleCalc">🧮 कैलकुलेटर</button>
+        </div>
+
+        <div class="panel" id="calcPanel" style="display:none;">
+          <h3>हिसाब-किताब</h3>
+          <div class="calc-display" id="calcDisplay">0</div>
+          <div class="calc-grid" id="calcGrid"></div>
+        </div>
+
+        <div class="panel" id="addPanel" style="display:none;">
+          <h3>नया आइटम जोड़ें</h3>
+          <div class="grid2">
+            <select id="newCat" class="full"></select>
+            <input id="newName" class="full" placeholder="वैरायटी / नाम" />
+            <input id="newQty" type="number" placeholder="मात्रा (kg)" />
+            <input id="newPrice" type="number" placeholder="भाव / kg (₹)" />
+            <input id="newThreshold" type="number" class="full" placeholder="कम-स्टॉक सीमा (kg)" value="2" />
+          </div>
+          <button class="btn-primary full" id="addBtn" style="width:100%;margin-top:10px;">जोड़ें</button>
+        </div>
+
+        <div class="ledger" id="ledgerList"></div>
+
+        <div class="footnote">डेटा सिर्फ इस ब्राउज़र सेशन में रहता है — पेज रीलोड होने पर मिट जाएगा</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const CATS = [
+  { id:"kaju", label:"काजू", en:"Kaju", icon:"🥜" },
+  { id:"badam", label:"बादाम", en:"Badam", icon:"🌰" },
+  { id:"kishmish", label:"किशमिश", en:"Kishmish", icon:"🍇" },
+  { id:"akhrot", label:"अखरोट", en:"Akhrot", icon:"🌰" },
+  { id:"pista", label:"पिस्ता", en:"Pista", icon:"🥜" },
+  { id:"khajur", label:"खजूर", en:"Khajur", icon:"🌴" },
+  { id:"anjeer", label:"अंजीर", en:"Anjeer", icon:"🍈" },
+  { id:"other", label:"अन्य", en:"Other", icon:"📦" },
+];
+
+let items = [
+  { id:1, name:"काजू (Kaju) - W240", cat:"kaju", qty:8, price:850, threshold:3 },
+  { id:2, name:"बादाम (Badam) - Mamra", cat:"badam", qty:2, price:950, threshold:4 },
+  { id:3, name:"किशमिश (Kishmish) - Green", cat:"kishmish", qty:6, price:320, threshold:2 },
+  { id:4, name:"अखरोट (Akhrot) - Kashmiri", cat:"akhrot", qty:1.5, price:1100, threshold:2 },
+  { id:5, name:"खजूर (Khajur) - Medjool", cat:"khajur", qty:5, price:600, threshold:2 },
+];
+
+const money = n => "₹" + Number(n).toLocaleString("en-IN", { maximumFractionDigits:2 });
+
+// ---- open book ----
+document.getElementById("coverEl").addEventListener("click", () => {
+  document.getElementById("coverEl").style.display = "none";
+  const book = document.getElementById("bookEl");
+  book.classList.add("show");
+});
+
+// date
+document.getElementById("dateStamp").textContent = new Date().toLocaleDateString("hi-IN", { day:"numeric", month:"long", year:"numeric" });
+
+// populate category select
+const newCatEl = document.getElementById("newCat");
+CATS.forEach(c => {
+  const opt = document.createElement("option");
+  opt.value = c.id;
+  opt.textContent = `${c.icon} ${c.label} (${c.en})`;
+  newCatEl.appendChild(opt);
+});
+
+function render(){
+  renderStamps();
+  renderList();
+}
+
+function renderStamps(){
+  const totalItems = items.length;
+  const totalQty = items.reduce((s,i)=>s+i.qty,0);
+  const totalValue = items.reduce((s,i)=>s+i.qty*i.price,0);
+  const lowCount = items.filter(i=>i.qty<=i.threshold).length;
+  const row = document.getElementById("stampsRow");
+  row.innerHTML = `
+    <span class="stamp dark">कुल आइटम: ${totalItems}</span>
+    <span class="stamp gold">कुल स्टॉक: ${totalQty.toFixed(1)} kg</span>
+    <span class="stamp ok">कुल कीमत: ${money(totalValue)}</span>
+    ${lowCount>0 ? `<span class="stamp low">⚠ ${lowCount} कम स्टॉक में</span>` : ""}
+  `;
+}
+
+function renderList(){
+  const search = document.getElementById("search").value.toLowerCase();
+  const list = document.getElementById("ledgerList");
+  const filtered = items.filter(i => i.name.toLowerCase().includes(search));
+  if(filtered.length === 0){
+    list.innerHTML = `<div class="empty">कोई आइटम नहीं मिला।</div>`;
+    return;
+  }
+  list.innerHTML = filtered.map(item => {
+    const cat = CATS.find(c=>c.id===item.cat) || CATS[CATS.length-1];
+    const isLow = item.qty <= item.threshold;
+    const total = item.qty * item.price;
+    return `
+    <div class="item" data-id="${item.id}">
+      <div class="item-top">
+        <div>
+          <div class="item-name">${cat.icon} ${item.name}</div>
+          <div style="margin-top:4px;">
+            ${isLow ? `<span class="stamp low">कम स्टॉक ⚠</span>` : `<span class="stamp ok">स्टॉक ठीक ✓</span>`}
+          </div>
+        </div>
+        <div>
+          <div class="item-qty">${item.qty} kg</div>
+          <div class="item-price">@ ${money(item.price)}/kg</div>
+          <div class="item-total">= ${money(total)}</div>
+        </div>
+      </div>
+      <div class="item-actions">
+        <input type="number" class="adjustInput" placeholder="kg" />
+        <button class="btn-ok addBtn">+ माल आया</button>
+        <button class="btn-low removeBtn">− बिका</button>
+        <button class="btn-outline editBtn">✎ भाव बदलें</button>
+        <button class="btn-ghost delBtn" style="margin-left:auto;">हटाएं</button>
+      </div>
+      <div class="editRow" style="display:none; margin-top:8px; padding:10px; background:var(--page-alt); border:1px dashed var(--gold); border-radius:8px;">
+        <label style="font-size:12px; color:var(--ink-soft); margin-right:10px;">भाव/kg
+          <input type="number" class="priceInput" value="${item.price}" style="width:70px; margin-left:4px;" />
+        </label>
+        <label style="font-size:12px; color:var(--ink-soft);">कम-स्टॉक सीमा
+          <input type="number" class="thresholdInput" value="${item.threshold}" style="width:60px; margin-left:4px;" />
+        </label>
+        <button class="btn-primary saveBtn" style="margin-left:8px;">सेव करें</button>
+      </div>
+    </div>`;
+  }).join("");
+
+  // wire events
+  list.querySelectorAll(".item").forEach(row => {
+    const id = Number(row.dataset.id);
+    const adjustInput = row.querySelector(".adjustInput");
+    row.querySelector(".addBtn").onclick = () => {
+      const v = parseFloat(adjustInput.value);
+      if(!isNaN(v) && v>0){ adjustStock(id, v); }
+    };
+    row.querySelector(".removeBtn").onclick = () => {
+      const v = parseFloat(adjustInput.value);
+      if(!isNaN(v) && v>0){ adjustStock(id, -v); }
+    };
+    row.querySelector(".delBtn").onclick = () => {
+      items = items.filter(i=>i.id!==id);
+      render();
+    };
+    const editRow = row.querySelector(".editRow");
+    row.querySelector(".editBtn").onclick = () => {
+      editRow.style.display = editRow.style.display === "none" ? "block" : "none";
+    };
+    row.querySelector(".saveBtn").onclick = () => {
+      const price = parseFloat(row.querySelector(".priceInput").value) || 0;
+      const threshold = parseFloat(row.querySelector(".thresholdInput").value) || 0;
+      const it = items.find(i=>i.id===id);
+      it.price = price; it.threshold = threshold;
+      render();
+    };
+  });
+}
+
+function adjustStock(id, delta){
+  const it = items.find(i=>i.id===id);
+  it.qty = Math.max(0, +(it.qty + delta).toFixed(2));
+  render();
+}
+
+document.getElementById("search").addEventListener("input", renderList);
+
+document.getElementById("toggleAdd").addEventListener("click", () => {
+  const p = document.getElementById("addPanel");
+  p.style.display = p.style.display === "none" ? "block" : "none";
+});
+document.getElementById("toggleCalc").addEventListener("click", () => {
+  const p = document.getElementById("calcPanel");
+  p.style.display = p.style.display === "none" ? "block" : "none";
+});
+
+document.getElementById("addBtn").addEventListener("click", () => {
+  const name = document.getElementById("newName").value.trim();
+  const qty = parseFloat(document.getElementById("newQty").value);
+  const price = parseFloat(document.getElementById("newPrice").value);
+  const threshold = parseFloat(document.getElementById("newThreshold").value) || 0;
+  const catId = document.getElementById("newCat").value;
+  if(!name || isNaN(qty) || isNaN(price)) return;
+  const cat = CATS.find(c=>c.id===catId);
+  items.push({ id:Date.now(), name:`${cat.label} (${cat.en}) - ${name}`, cat:catId, qty, price, threshold });
+  document.getElementById("newName").value="";
+  document.getElementById("newQty").value="";
+  document.getElementById("newPrice").value="";
+  document.getElementById("newThreshold").value="2";
+  document.getElementById("addPanel").style.display="none";
+  render();
+});
+
+// ---- calculator ----
+const calcLayout = [
+  {label:"C", cls:"clr"}, {label:"÷", cls:"op"}, {label:"×", cls:"op"}, {label:"−", cls:"op"},
+  {label:"7"}, {label:"8"}, {label:"9"}, {label:"+", cls:"op plus"},
+  {label:"4"}, {label:"5"}, {label:"6"},
+  {label:"1"}, {label:"2"}, {label:"3"}, {label:"=", cls:"eq"},
+  {label:"0", cls:"zero"}, {label:"."},
+];
+const calcGrid = document.getElementById("calcGrid");
+calcGrid.innerHTML = calcLayout.map(b => `<button class="${b.cls||""}" data-k="${b.label}">${b.label}</button>`).join("");
+
+let calc = { display:"0", prev:null, op:null, waiting:false };
+const calcDisplay = document.getElementById("calcDisplay");
+
+function calcCompute(a,b,op){
+  switch(op){ case "+": return a+b; case "−": return a-b; case "×": return a*b; case "÷": return b===0?0:a/b; default: return b; }
+}
+calcGrid.addEventListener("click", (e) => {
+  const btn = e.target.closest("button");
+  if(!btn) return;
+  const k = btn.dataset.k;
+  if(k === "C"){ calc = { display:"0", prev:null, op:null, waiting:false }; }
+  else if(k === "."){
+    if(calc.waiting){ calc.display = "0."; calc.waiting = false; }
+    else if(!calc.display.includes(".")) calc.display += ".";
+  } else if(["+","−","×","÷"].includes(k)){
+    const val = parseFloat(calc.display);
+    if(calc.prev === null){ calc.prev = val; }
+    else if(!calc.waiting){ calc.prev = calcCompute(calc.prev, val, calc.op); calc.display = String(calc.prev); }
+    calc.waiting = true; calc.op = k;
+  } else if(k === "="){
+    if(calc.op === null || calc.prev === null) return;
+    const val = parseFloat(calc.display);
+    calc.display = String(calcCompute(calc.prev, val, calc.op));
+    calc.prev = null; calc.op = null; calc.waiting = true;
+  } else {
+    // digit
+    if(calc.waiting){ calc.display = k; calc.waiting = false; }
+    else { calc.display = calc.display === "0" ? k : calc.display + k; }
+  }
+  calcDisplay.textContent = calc.display;
+});
+
+render();
+</script>
+</body>
+</html>
